@@ -3,6 +3,8 @@
 ## Overview
 This is a comprehensive Bridge Slab Design application that processes Excel calculation sheets and generates detailed engineering reports. The system integrates all Excel calculation sheets with Claude AI validation for enhanced accuracy and reliability.
 
+The application now includes an organized output folder system that stores files in date-based subfolders with bridge type and serial numbering.
+
 ## How to Run
 
 ### Prerequisites
@@ -62,6 +64,36 @@ This is a comprehensive Bridge Slab Design application that processes Excel calc
 - **AI Validation**: Claude AI validation for enhanced accuracy
 - **Report Generation**: Professional PDF reports with detailed calculations
 - **Interactive UI**: Streamlit-based web interface for easy interaction
+- **Organized Output Storage**: Files saved in date-based subfolders with bridge type and serial numbers
+
+## Output Folder System
+
+The application now automatically organizes generated reports in a structured folder system:
+
+```
+outputs/
+├── 2025-09-23/
+│   ├── Submersible_Bridge/
+│   │   ├── 2025-09-23_Submersible_Bridge_001_143022.pdf
+│   │   └── 2025-09-23_Submersible_Bridge_002_143545.pdf
+│   └── High_Level_Bridge/
+│       └── 2025-09-23_High_Level_Bridge_001_144012.pdf
+└── 2025-09-24/
+    └── Aqueduct/
+        └── 2025-09-24_Aqueduct_001_101530.pdf
+```
+
+Each generated report is automatically saved to:
+- A date-based folder (YYYY-MM-DD)
+- A bridge type subfolder
+- A filename that includes:
+  - Date (YYYY-MM-DD)
+  - Bridge type
+  - Serial number (001, 002, etc.)
+  - Timestamp (HHMMSS)
+  - File extension
+
+This organization makes it easy to locate specific reports and prevents filename conflicts when multiple reports are generated on the same date.
 
 ## File Structure
 
@@ -81,9 +113,11 @@ Bridge_Slab_Design2/
 │   ├── claude_integration.py
 │   ├── pdf_generator.py
 │   └── master_coordinator.py
-├── utils/
+├── utils/                 # Utility modules
 │   ├── data_structures.py
-│   └── formula_extractor.py
+│   ├── formula_extractor.py
+│   └── output_manager.py  # New output folder system
+├── outputs/               # Generated reports (automatically created)
 └── static/                # Static assets
     └── styles.css
 ```
@@ -124,6 +158,11 @@ The application can be run locally using the Streamlit command mentioned above.
 Run individual module tests:
 ```bash
 python -m pytest tests/
+```
+
+Test the output manager:
+```bash
+python test_output_manager.py
 ```
 
 ## Troubleshooting

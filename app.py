@@ -28,6 +28,7 @@ from modules.claude_integration import ClaudeIntegration
 from modules.pdf_generator import PDFGenerator
 from modules.master_coordinator import MasterCoordinator
 from utils.data_structures import ProjectData, BridgeConfiguration
+from utils.output_manager import OutputManager
 
 # Page configuration
 st.set_page_config(
@@ -1476,6 +1477,22 @@ def show_report_generation():
                 with col3:
                     st.metric("Sections Included", f"{len(include_sections)}")
                 
+                # Save to organized output folder structure
+                output_manager = OutputManager()
+                bridge_type = st.session_state.project_data.project_type if st.session_state.project_data else "Unknown_Bridge"
+                file_extension = {"PDF": "pdf", "HTML": "html", "Word Document": "docx"}[output_format]
+                
+                try:
+                    # Save the report to organized directory structure
+                    saved_path = output_manager.save_output_file(
+                        report_buffer.getvalue(), 
+                        bridge_type, 
+                        file_extension
+                    )
+                    st.info(f"💾 Report also saved to: {saved_path}")
+                except Exception as e:
+                    st.warning(f"Could not save report to organized folder structure: {e}")
+                
                 # Download button
                 file_extension = {"PDF": "pdf", "HTML": "html", "Word Document": "docx"}[output_format]
                 mime_types = {
@@ -1526,6 +1543,19 @@ def show_report_generation():
                         
                         exec_buffer = pdf_generator.generate_executive_summary(report_data, exec_config)
                         
+                        # Save executive summary to organized output folder
+                        try:
+                            output_manager = OutputManager()
+                            bridge_type = st.session_state.project_data.project_type if st.session_state.project_data else "Unknown_Bridge"
+                            saved_path = output_manager.save_output_file(
+                                exec_buffer.getvalue(), 
+                                bridge_type, 
+                                "pdf"
+                            )
+                            st.info(f"💾 Executive Summary also saved to: {saved_path}")
+                        except Exception as e:
+                            st.warning(f"Could not save executive summary to organized folder: {e}")
+                        
                         st.download_button(
                             label="📋 Download Executive Summary",
                             data=exec_buffer.getvalue(),
@@ -1536,6 +1566,19 @@ def show_report_generation():
                 with col2:
                     if st.button("Generate Calculation Sheets"):
                         calc_buffer = pdf_generator.generate_calculation_sheets(report_data)
+                        
+                        # Save calculation sheets to organized output folder
+                        try:
+                            output_manager = OutputManager()
+                            bridge_type = st.session_state.project_data.project_type if st.session_state.project_data else "Unknown_Bridge"
+                            saved_path = output_manager.save_output_file(
+                                calc_buffer.getvalue(), 
+                                bridge_type, 
+                                "pdf"
+                            )
+                            st.info(f"💾 Calculation Sheets also saved to: {saved_path}")
+                        except Exception as e:
+                            st.warning(f"Could not save calculation sheets to organized folder: {e}")
                         
                         st.download_button(
                             label="🔢 Download Calculation Sheets",
