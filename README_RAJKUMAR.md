@@ -9,7 +9,7 @@ The application now includes an organized output folder system that stores files
 
 ### Prerequisites
 - Python 3.11 or higher
-- Required Python packages (see pyproject.toml)
+- Required Python packages (see pyproject.toml or requirements.txt)
 - Anthropic API key for Claude AI integration (optional but recommended)
 
 ### Installation Steps
@@ -23,6 +23,10 @@ The application now includes an organized output folder system that stores files
 2. **Install dependencies:**
    ```bash
    pip install -e .
+   ```
+   or
+   ```bash
+   pip install -r requirements.txt
    ```
    or
    ```bash
@@ -100,7 +104,9 @@ This organization makes it easy to locate specific reports and prevents filename
 ```
 Bridge_Slab_Design2/
 ├── app.py                 # Main application file
+├── requirements.txt       # Python dependencies for deployment
 ├── pyproject.toml         # Project dependencies
+├── Procfile               # Deployment configuration for Streamlit Cloud
 ├── .streamlit/
 │   └── config.toml        # Streamlit configuration
 ├── modules/               # Core functionality modules
@@ -144,11 +150,31 @@ git push origin main
 
 ## Deployment
 
-### Streamlit Cloud Deployment
-1. Push your code to GitHub
-2. Connect your repository to Streamlit Cloud
-3. Configure environment variables if needed
-4. Deploy the application
+### Streamlit Cloud Deployment (Recommended)
+1. **Push your code to GitHub:**
+   ```bash
+   git add .
+   git commit -m "Prepare for Streamlit Cloud deployment"
+   git push origin main
+   ```
+
+2. **Connect to Streamlit Cloud:**
+   - Go to [Streamlit Cloud](https://streamlit.io/cloud)
+   - Sign in with your GitHub account
+   - Click "New app"
+   - Select your repository (CRAJKUMARSINGH/Bridge_Slab_Design2)
+   - Set the main file path to `app.py`
+   - Click "Deploy!"
+
+3. **Configure environment variables (if using Claude AI):**
+   - In the Streamlit Cloud app settings, add the environment variable:
+     - Key: `ANTHROPIC_API_KEY`
+     - Value: Your Anthropic API key
+
+4. **Advanced configuration:**
+   - The app will automatically use the `Procfile` for deployment
+   - The app will automatically install dependencies from `requirements.txt`
+   - Custom Streamlit settings are in `.streamlit/config.toml`
 
 ### Local Deployment
 The application can be run locally using the Streamlit command mentioned above.
